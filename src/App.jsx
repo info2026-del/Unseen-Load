@@ -296,12 +296,11 @@ function ScreenContext({ onSubmit, onBack }) {
   const [form, setForm] = useState({ name: "", role: "", sector: "", stage: "", concern: "" });
 
   const handleChange = (field) => (e) => {
-    const val = e.target.value;
+   const val = e.target.value;    
     setForm(prev => ({ ...prev, [field]: val }));
   };
 
-  const valid = form.name && form.role && form.sector && form.stage && form.concern;
-
+ const valid = form.name && form.role    
   const FL = ({ label, children }) => (
     <div>
       <label style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.56rem", letterSpacing: "0.18em", textTransform: "uppercase", color: B.muted, display: "block", marginBottom: 8 }}>
