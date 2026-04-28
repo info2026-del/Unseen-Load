@@ -295,11 +295,10 @@ function ScreenIntro({ onStart }) {
 function ScreenContext({ onSubmit, onBack }) {
   const [form, setForm] = useState({ name: "", role: "", sector: "", stage: "", concern: "" });
 
-  const handleChange = (field) => (e) => {
-   const val = e.target.value;    
-    setForm(prev => ({ ...prev, [field]: val }));
+const handleChange = (field) => (evt) => {
+    const v = evt.currentTarget.value;
+    setForm(prev => ({ ...prev, [field]: v }));
   };
-
  const valid = form.name && form.role    
   const FL = ({ label, children }) => (
     <div>
