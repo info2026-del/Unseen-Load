@@ -1,6 +1,27 @@
 import { useState, useEffect } from "react";
 
-// ── BHI BRAND COLOURS (purple and teal — correct to supplied logo) ──────────
+// ── EMAILJS ────────────────────────────────────────────────────────────────
+const EMAILJS_SERVICE_ID  = "service_fpvhlyr";
+const EMAILJS_TEMPLATE_ID = "template_ps4e8dq";
+const EMAILJS_PUBLIC_KEY  = "M_-ZcSaSXDvOx1Ol4";
+
+const sendViaEmailJS = async (templateParams) => {
+  const url = "https://api.emailjs.com/api/v1.0/email/send";
+  const body = {
+    service_id:  EMAILJS_SERVICE_ID,
+    template_id: EMAILJS_TEMPLATE_ID,
+    user_id:     EMAILJS_PUBLIC_KEY,
+    template_params: templateParams,
+  };
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`EmailJS error: ${res.status}`);
+};
+
+// ── BHI BRAND COLOURS ──────────────────────────────────────────────────────
 const B = {
   purple:     "#5B4B9A",
   purpleDark: "#4a3d85",
@@ -291,9 +312,15 @@ function ScreenIntro({ onStart }) {
   );
 }
 
+// FIXED: onChange handlers use direct field update — no currying bug
 function ScreenContext({ onSubmit, onBack }) {
   const [form, setForm] = useState({ name: "", role: "", sector: "", stage: "", concern: "" });
-  const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
+
+  const handleChange = (field) => (e) => {
+    const val = e.target.value;
+    setForm(prev => ({ ...prev, [field]: val }));
+  };
+
   const valid = form.name && form.role && form.sector && form.stage && form.concern;
 
   const FL = ({ label, children }) => (
@@ -320,13 +347,13 @@ function ScreenContext({ onSubmit, onBack }) {
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 24, maxWidth: 600, marginBottom: 36 }}>
           <FL label="Your name">
-            <input style={inputStyle} value={form.name} onChange={set("name")} placeholder="First name is enough" />
+            <input style={inputStyle} value={form.name} onChange={handleChange("name")} placeholder="First name is enough" />
           </FL>
           <FL label="Your current role">
-            <input style={inputStyle} value={form.role} onChange={set("role")} placeholder="How you would describe it honestly" />
+            <input style={inputStyle} value={form.role} onChange={handleChange("role")} placeholder="How you would describe it honestly" />
           </FL>
           <FL label="Sector">
-            <select style={inputStyle} value={form.sector} onChange={set("sector")}>
+            <select style={inputStyle} value={form.sector} onChange={handleChange("sector")}>
               <option value="">Select</option>
               {["Financial Services","Healthcare","Education","Professional Services","Public Sector","Third Sector and NGO","Technology","Legal","Creative and Media","Manufacturing and Engineering","Retail and Consumer","Other"].map(s => (
                 <option key={s} value={s}>{s}</option>
@@ -334,7 +361,7 @@ function ScreenContext({ onSubmit, onBack }) {
             </select>
           </FL>
           <FL label="Stage of career">
-            <select style={inputStyle} value={form.stage} onChange={set("stage")}>
+            <select style={inputStyle} value={form.stage} onChange={handleChange("stage")}>
               <option value="">Select</option>
               <option value="early">Building: early leadership</option>
               <option value="mid">Established: mid career</option>
@@ -343,7 +370,7 @@ function ScreenContext({ onSubmit, onBack }) {
             </select>
           </FL>
           <FL label="What brought you here today">
-            <select style={inputStyle} value={form.concern} onChange={set("concern")}>
+            <select style={inputStyle} value={form.concern} onChange={handleChange("concern")}>
               <option value="">Select the closest</option>
               <option value="tired">I am tired in a way I cannot explain</option>
               <option value="performing">I am performing well but it is costing more than it should</option>
@@ -495,10 +522,7 @@ function ScreenEmail({ onSubmit, onSkip }) {
             style={{ ...inputStyle, fontSize: "1rem", marginBottom: 20, maxWidth: 400, display: "block" }}
           />
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <button
-              onClick={() => { if (hasEmail) onSubmit(email.trim()); }}
-              style={btnStyle(hasEmail ? B.purple : "#ccc", !hasEmail)}
-            >
+            <button onClick={() => { if (hasEmail) onSubmit(email.trim()); }} style={btnStyle(hasEmail ? B.purple : "#ccc", !hasEmail)}>
               Show me my map &rarr;
             </button>
             <button onClick={onSkip} style={ghostBtn}>Skip for now</button>
@@ -548,7 +572,7 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
   };
 
   const handleShare = () => {
-    const msg = "I just completed The Unseen Load: a performance intelligence tool for women leaders from Business Health Institute. businesshealthinstitute.co.uk";
+    const msg = "I just completed The Unseen Load: a performance intelligence tool for women leaders from Business Health Institute. unseenload.co.uk";
     if (navigator.share) { navigator.share({ title: "The Unseen Load", text: msg }); }
     else { navigator.clipboard.writeText(msg).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2500); }); }
   };
@@ -780,15 +804,15 @@ const injectGlobalStyles = () => {
 export default function App() {
   useEffect(() => { injectGlobalStyles(); }, []);
 
-  const [screen, setScreen]         = useState("intro");
-  const [userData, setUserData]     = useState({});
-  const [email, setEmail]           = useState("");
-  const [domainIdx, setDomainIdx]   = useState(0);
-  const [qIdx, setQIdx]             = useState(0);
-  const [showIntro, setShowIntro]   = useState(true);
-  const [answers, setAnswers]       = useState(() => DOMAINS.map(d => new Array(d.questions.length).fill(null)));
-  const [genStatus, setGenStatus]   = useState("");
-  const [results, setResults]       = useState(null);
+  const [screen, setScreen]       = useState("intro");
+  const [userData, setUserData]   = useState({});
+  const [email, setEmail]         = useState("");
+  const [domainIdx, setDomainIdx] = useState(0);
+  const [qIdx, setQIdx]           = useState(0);
+  const [showIntro, setShowIntro] = useState(true);
+  const [answers, setAnswers]     = useState(() => DOMAINS.map(d => new Array(d.questions.length).fill(null)));
+  const [genStatus, setGenStatus] = useState("");
+  const [results, setResults]     = useState(null);
 
   const currentAnswer = answers[domainIdx]?.[qIdx];
   const globalQ = DOMAINS.slice(0, domainIdx).reduce((a, d) => a + d.questions.length, 0) + qIdx;
@@ -902,24 +926,23 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
       openQuestion = "What would it mean for the way you lead if the invisible cost of your performance became as measurable as the results you produce?";
     }
 
+    // ── EMAILJS: send directly from browser, no server needed ─────────────
     if (capturedEmail) {
       try {
-        await fetch("/api/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userEmail: capturedEmail,
-            name: userData.name,
-            role: userData.role,
-            sector: userData.sector,
-            stage: userData.stage,
-            concern: userData.concern,
-            domainScores: domainResults.map(d => `${d.title}: ${riskLabel[riskLevel(d.avg)]}`).join("\n"),
-            narrative,
-            openQuestion,
-          })
+        await sendViaEmailJS({
+          name:          userData.name || "Not provided",
+          role:          userData.role || "Not provided",
+          sector:        userData.sector || "Not provided",
+          stage:         userData.stage || "Not provided",
+          concern:       userData.concern || "Not provided",
+          user_email:    capturedEmail,
+          domain_scores: domainSummary,
+          narrative:     narrative,
+          open_question: openQuestion,
         });
-      } catch { /* email failure is non-blocking */ }
+      } catch (err) {
+        console.warn("EmailJS failed:", err);
+      }
     }
 
     clearInterval(interval);
