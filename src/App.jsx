@@ -946,3 +946,11 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
     </div>
   );
 }
+
+{screen === "questions"  && !showIntro && <ScreenQuestion domain={DOMAINS[domainIdx]} domainIndex={domainIdx} qIndex={qIdx} answer={currentAnswer} onSelect={setAnswer} onNext={goNext} onBack={goBack} isLast={isLastQ} />}
+      {screen === "email"      && <ScreenEmail onSubmit={e => { setEmail(e); generateMap(e); }} onSkip={() => generateMap("")} />}
+      {screen === "generating" && <ScreenGenerating status={genStatus} />}
+      {screen === "map"        && results && <ScreenMap {...results} userData={userData} email={email} />}
+    </div>
+  );
+}
