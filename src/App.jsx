@@ -1,26 +1,5 @@
 import { useState, useEffect } from "react";
 
-// ── EMAILJS ────────────────────────────────────────────────────────────────
-const EMAILJS_SERVICE_ID  = "service_fpvhlyr";
-const EMAILJS_TEMPLATE_ID = "template_ps4e8dq";
-const EMAILJS_PUBLIC_KEY  = "M_-ZcSaSXDvOx1Ol4";
-
-const sendViaEmailJS = async (templateParams) => {
-  const url = "https://api.emailjs.com/api/v1.0/email/send";
-  const body = {
-    service_id:  EMAILJS_SERVICE_ID,
-    template_id: EMAILJS_TEMPLATE_ID,
-    user_id:     EMAILJS_PUBLIC_KEY,
-    template_params: templateParams,
-  };
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`EmailJS error: ${res.status}`);
-};
-
 // ── BHI BRAND COLOURS ──────────────────────────────────────────────────────
 const B = {
   purple:     "#5B4B9A",
@@ -926,28 +905,35 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
       openQuestion = "What would it mean for the way you lead if the invisible cost of your performance became as measurable as the results you produce?";
     }
 
-    // ── EMAILJS: send directly from browser, no server needed ─────────────
+    // ── Send via /api/send-email ───────────────────────────────────────────
     if (capturedEmail) {
-  try {
-    await fetch("/api/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userEmail: capturedEmail,
-      name: userData.name,     
-        role: userData.role,
-        sector: userData.sector,
-        stage: userData.stage,
-        concern: userData.concern,
-        domainScores: domainSummary,
-        narrative,
-        openQuestion,
-      })
-    });
-  } catch (err) {
-    console.warn("Email failed:", err);
-  }
-}
+      try {
+        await fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userEmail:    capturedEmail,
+            name:         userData.name || "Not provided",
+            role:         userData.role || "Not provided",
+            sector:       userData.sector || "Not provided",
+            stage:        userData.stage || "Not provided",
+            concern:      userData.concern || "Not provided",
+            domainScores: domainSummary,
+            narrative:    narrative,
+            openQuestion: openQuestion,
+          }),
+        });
+      } catch (err) {
+        console.warn("Email failed:", err);
+      }
+    }
+
+    clearInterval(interval);
+    setResults({ domainResults, narrative, openQuestion });
+    setScreen("map");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div style={{ fontFamily: "'Lato', sans-serif", background: B.offwhite, minHeight: "100vh" }}>
       {screen === "intro"      && <ScreenIntro onStart={() => setScreen("context")} />}
