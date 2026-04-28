@@ -934,7 +934,7 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userEmail: capturedEmail,
-        name: userData.name,
+      name: userData.name,     
         role: userData.role,
         sector: userData.sector,
         stage: userData.stage,
