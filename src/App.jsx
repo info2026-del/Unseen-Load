@@ -19,7 +19,7 @@ const B = {
   high:       "#B02020",
 };
 
-// ── DOMAINS — word for word from source ────────────────────────────────────
+// ── DOMAINS ────────────────────────────────────────────────────────────────
 const DOMAINS = [
   {
     id: "nervous-system",
@@ -229,16 +229,10 @@ const riskLabel = { regulated: "Regulated", stretched: "Under pressure", deplete
 const riskColor = { regulated: B.low, stretched: B.mid, depleted: B.high };
 const riskPct   = avg => Math.round(((avg - 1) / 3) * 100);
 
-// ── BHI LOGO — actual supplied logo image ──────────────────────────────────
-// Logo file is in /public/bhi_logo.jpg and served by Vercel at /bhi_logo.jpg
 function BHILogo({ style = {}, height = 52 }) {
   return (
     <div style={{ ...style }}>
-      <img
-        src="/bhi_logo.jpg"
-        alt="Business Health Institute"
-        style={{ height: height, width: "auto", display: "block" }}
-      />
+      <img src="/bhi_logo.jpg" alt="Business Health Institute" style={{ height: height, width: "auto", display: "block" }} />
     </div>
   );
 }
@@ -252,19 +246,13 @@ const Mono = ({ children, style = {} }) => (
 const Dots = () => (
   <span style={{ display: "inline-flex", gap: 5, alignItems: "center" }}>
     {[0, 1, 2].map(i => (
-      <span key={i} style={{
-        width: 5, height: 5, borderRadius: "50%", background: B.purple, opacity: 0.2,
-        animation: `dotPulse 1.3s ease-in-out ${i * 0.22}s infinite`
-      }} />
+      <span key={i} style={{ width: 5, height: 5, borderRadius: "50%", background: B.purple, opacity: 0.2, animation: `dotPulse 1.3s ease-in-out ${i * 0.22}s infinite` }} />
     ))}
   </span>
 );
 
 const PAD = "48px clamp(20px, 6vw, 80px)";
 
-// ─────────────────────────────────────
-// SCREEN: INTRO
-// ─────────────────────────────────────
 function ScreenIntro({ onStart }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", fontFamily: "'Lato', sans-serif" }}>
@@ -277,7 +265,6 @@ function ScreenIntro({ onStart }) {
           The <em style={{ color: "#5DCAA5", fontStyle: "italic" }}>Unseen</em> Load
         </h1>
       </div>
-
       <div style={{ flex: 1, background: B.white, padding: PAD, display: "flex", flexDirection: "column" }}>
         <div style={{ maxWidth: 560 }}>
           <p style={{ fontSize: "1.02rem", lineHeight: 1.88, color: B.muted, marginBottom: 14 }}>
@@ -286,20 +273,17 @@ function ScreenIntro({ onStart }) {
           <p style={{ fontSize: "1.02rem", lineHeight: 1.88, color: B.muted, marginBottom: 36 }}>
             This is a structured reflection across five domains of performance that conventional leadership frameworks do not measure. At the end you will receive a personal performance map.
           </p>
-
           <div style={{ background: B.offwhite, border: `1.5px solid ${B.rule}`, borderLeft: `3px solid ${B.purple}`, padding: "18px 22px", borderRadius: 6, marginBottom: 36 }}>
             <Mono style={{ color: B.purple, display: "block", marginBottom: 8 }}>Please read before you begin</Mono>
             <p style={{ fontSize: "0.8rem", lineHeight: 1.72, color: B.muted }}>
               The Unseen Load is a reflective tool grounded in published research. It is intended for personal reflection only and does not constitute medical, psychological, or occupational health advice. It does not diagnose or treat any condition. Business Health Institute accepts no liability for decisions made on the basis of this tool alone.
             </p>
           </div>
-
           <button onClick={onStart} style={btnStyle(B.purple)}>Begin &rarr;</button>
         </div>
-
         <div style={{ marginTop: "auto", paddingTop: 36, display: "flex", gap: 32, flexWrap: "wrap" }}>
           {["5 domains", "15 questions", "Personal performance map", "Approx 20 minutes"].map(t => (
-            <Mono key={t} style={{ color: B.rule }}>{t}</Mono>
+            <Mono key={t} style={{ color: B.muted }}>{t}</Mono>
           ))}
         </div>
       </div>
@@ -307,9 +291,6 @@ function ScreenIntro({ onStart }) {
   );
 }
 
-// ─────────────────────────────────────
-// SCREEN: CONTEXT
-// ─────────────────────────────────────
 function ScreenContext({ onSubmit, onBack }) {
   const [form, setForm] = useState({ name: "", role: "", sector: "", stage: "", concern: "" });
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
@@ -337,7 +318,6 @@ function ScreenContext({ onSubmit, onBack }) {
         <p style={{ color: B.muted, fontSize: "0.93rem", lineHeight: 1.8, maxWidth: 480, marginBottom: 36 }}>
           A few things that will allow your map to be specific to you. Your responses are not stored or shared.
         </p>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 24, maxWidth: 600, marginBottom: 36 }}>
           <FL label="Your name">
             <input style={inputStyle} value={form.name} onChange={set("name")} placeholder="First name is enough" />
@@ -374,7 +354,6 @@ function ScreenContext({ onSubmit, onBack }) {
             </select>
           </FL>
         </div>
-
         <div style={{ display: "flex", gap: 12 }}>
           <button onClick={onBack} style={ghostBtn}>Back</button>
           <button onClick={() => valid && onSubmit(form)} style={btnStyle(valid ? B.purple : "#ccc", !valid)}>Continue &rarr;</button>
@@ -384,9 +363,6 @@ function ScreenContext({ onSubmit, onBack }) {
   );
 }
 
-// ─────────────────────────────────────
-// SCREEN: DOMAIN INTRO
-// ─────────────────────────────────────
 function ScreenDomainIntro({ domain, domainIndex, onContinue, onBack }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -402,14 +378,13 @@ function ScreenDomainIntro({ domain, domainIndex, onContinue, onBack }) {
           {domain.subtitle}
         </p>
       </div>
-
       <div style={{ flex: 1, background: B.white, padding: PAD }}>
         <div style={{ maxWidth: 580 }}>
           <p style={{ fontSize: "0.97rem", lineHeight: 1.85, color: B.muted, marginBottom: 24 }}>{domain.intro}</p>
           <div style={{ background: B.offwhite, border: `1.5px solid ${B.rule}`, borderLeft: `3px solid ${B.teal}`, padding: "18px 22px", borderRadius: 6, marginBottom: 36 }}>
             <Mono style={{ color: B.purple, display: "block", marginBottom: 8 }}>Research foundation</Mono>
             <p style={{ fontSize: "0.81rem", lineHeight: 1.72, color: B.muted, marginBottom: 8 }}>{domain.scienceNote}</p>
-            <Mono style={{ color: B.rule, lineHeight: 1.6 }}>{domain.science}</Mono>
+            <Mono style={{ color: B.muted, lineHeight: 1.6 }}>{domain.science}</Mono>
           </div>
           <div style={{ display: "flex", gap: 12 }}>
             <button onClick={onBack} style={ghostBtn}>Back</button>
@@ -421,9 +396,6 @@ function ScreenDomainIntro({ domain, domainIndex, onContinue, onBack }) {
   );
 }
 
-// ─────────────────────────────────────
-// SCREEN: QUESTION
-// ─────────────────────────────────────
 function ScreenQuestion({ domain, domainIndex, qIndex, answer, onSelect, onNext, onBack, isLast }) {
   const q = domain.questions[qIndex];
   const globalQ = DOMAINS.slice(0, domainIndex).reduce((a, d) => a + d.questions.length, 0) + qIndex;
@@ -440,7 +412,6 @@ function ScreenQuestion({ domain, domainIndex, qIndex, answer, onSelect, onNext,
           <div style={{ height: "100%", width: `${pct}%`, background: "#5DCAA5", borderRadius: 2, transition: "width 0.5s ease" }} />
         </div>
       </div>
-
       <div style={{ flex: 1, background: B.white, padding: PAD, display: "flex", flexDirection: "column" }}>
         <div style={{ maxWidth: 580, flex: 1 }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.2rem,2.7vw,1.8rem)", fontWeight: 300, color: B.ink, lineHeight: 1.5, marginBottom: q.sub ? 12 : 28 }}>
@@ -471,7 +442,6 @@ function ScreenQuestion({ domain, domainIndex, qIndex, answer, onSelect, onNext,
             ))}
           </div>
         </div>
-
         <div style={{ display: "flex", gap: 12, marginTop: 36 }}>
           <button onClick={onBack} style={ghostBtn}>Back</button>
           {answer !== null && answer !== undefined && (
@@ -485,11 +455,9 @@ function ScreenQuestion({ domain, domainIndex, qIndex, answer, onSelect, onNext,
   );
 }
 
-// ─────────────────────────────────────
-// SCREEN: EMAIL — Tony Robbins bridge copy word for word
-// ─────────────────────────────────────
 function ScreenEmail({ onSubmit, onSkip }) {
   const [email, setEmail] = useState("");
+  const hasEmail = email.trim().length > 0;
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -498,8 +466,6 @@ function ScreenEmail({ onSubmit, onSkip }) {
       </div>
       <div style={{ flex: 1, background: B.white, padding: PAD }}>
         <div style={{ maxWidth: 560 }}>
-
-          {/* Tony Robbins bridge copy */}
           <div style={{ marginBottom: 44 }}>
             <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.1rem,2.4vw,1.4rem)", fontWeight: 300, color: B.ink, lineHeight: 1.75, marginBottom: 20 }}>
               If I asked you honestly: not the version you present at work, the honest version. Is there a part of you that knows something is off?
@@ -516,14 +482,11 @@ function ScreenEmail({ onSubmit, onSkip }) {
               </p>
             </div>
           </div>
-
           <div style={{ height: 1, background: B.rule, marginBottom: 36 }} />
-
           <Mono style={{ color: B.purple, display: "block", marginBottom: 16 }}>Your map is ready</Mono>
           <p style={{ color: B.muted, fontSize: "0.91rem", lineHeight: 1.8, marginBottom: 28 }}>
             Your performance map will display immediately. We will also send you a copy so you can return to it, and a member of the BHI team may follow up: only if that would be welcome.
           </p>
-
           <input
             type="email"
             value={email}
@@ -531,9 +494,13 @@ function ScreenEmail({ onSubmit, onSkip }) {
             placeholder="your@email.com"
             style={{ ...inputStyle, fontSize: "1rem", marginBottom: 20, maxWidth: 400, display: "block" }}
           />
-
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <button onClick={() => onSubmit(email)} style={btnStyle(B.purple)}>Show me my map &rarr;</button>
+            <button
+              onClick={() => { if (hasEmail) onSubmit(email.trim()); }}
+              style={btnStyle(hasEmail ? B.purple : "#ccc", !hasEmail)}
+            >
+              Show me my map &rarr;
+            </button>
             <button onClick={onSkip} style={ghostBtn}>Skip for now</button>
           </div>
         </div>
@@ -542,9 +509,6 @@ function ScreenEmail({ onSubmit, onSkip }) {
   );
 }
 
-// ─────────────────────────────────────
-// SCREEN: GENERATING
-// ─────────────────────────────────────
 function ScreenGenerating({ status }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -565,9 +529,6 @@ function ScreenGenerating({ status }) {
   );
 }
 
-// ─────────────────────────────────────
-// SCREEN: RESULTS MAP
-// ─────────────────────────────────────
 function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) {
   const [barsReady, setBarsReady] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -594,7 +555,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
 
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'Lato', sans-serif" }}>
-      {/* Header */}
       <div style={{ background: B.purple, padding: "28px clamp(20px,6vw,80px) 48px" }}>
         <BHILogo style={{ marginBottom: 32 }} />
         <Mono style={{ color: "rgba(255,255,255,0.4)", display: "block", marginBottom: 12 }}>
@@ -609,8 +569,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
       </div>
 
       <div style={{ background: B.white, padding: PAD }}>
-
-        {/* Identity reframe */}
         <div style={{ maxWidth: 660, marginBottom: 44, padding: "28px 32px", background: B.offwhite, borderLeft: `3px solid ${B.teal}`, borderRadius: 6 }}>
           <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.02rem", fontWeight: 300, color: B.ink, lineHeight: 1.82, marginBottom: 14 }}>
             You are not burned out. You are not failing. You are not too sensitive for the role.
@@ -620,7 +578,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
           </p>
         </div>
 
-        {/* Domain bars */}
         <Mono style={{ color: B.muted, display: "block", marginBottom: 16 }}>Your five domains</Mono>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 680, marginBottom: 44 }}>
           {domainResults.map((d, i) => {
@@ -644,7 +601,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
           })}
         </div>
 
-        {/* AI narrative */}
         <div style={{ maxWidth: 680, background: B.offwhite, padding: "32px 36px", borderLeft: `3px solid ${B.purple}`, borderRadius: 6, marginBottom: 44 }}>
           <Mono style={{ color: B.purple, display: "block", marginBottom: 22 }}>What your map is saying</Mono>
           {narrative ? (
@@ -656,7 +612,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
           ) : <Dots />}
         </div>
 
-        {/* Open question */}
         {openQuestion && (
           <div style={{ maxWidth: 640, marginBottom: 44 }}>
             <Mono style={{ color: B.purple, display: "block", marginBottom: 14 }}>The question this opens</Mono>
@@ -666,7 +621,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
           </div>
         )}
 
-        {/* Cost of inaction */}
         <div style={{ maxWidth: 660, marginBottom: 44, padding: "28px 32px", background: B.offwhite, borderLeft: `3px solid ${B.purple}`, borderRadius: 6 }}>
           <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.02rem", fontWeight: 300, color: B.ink, lineHeight: 1.82, marginBottom: 14 }}>
             Consider what another year without this picture actually means.
@@ -679,14 +633,11 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
           </p>
         </div>
 
-        {/* Retreat CTA */}
         <div style={{ maxWidth: 660, border: `1.5px solid ${B.rule}`, padding: "36px 40px", borderRadius: 10, marginBottom: 44 }}>
           <Mono style={{ color: B.purple, display: "block", marginBottom: 14 }}>The next layer</Mono>
           <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.5rem", fontWeight: 300, color: B.ink, marginBottom: 20 }}>
             Your map in words. Your data in your body.
           </h3>
-
-          {/* Social proof */}
           <div style={{ background: B.offwhite, borderLeft: `3px solid ${B.teal}`, padding: "14px 18px", borderRadius: 4, marginBottom: 24 }}>
             <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: "0.93rem", color: B.muted, lineHeight: 1.75, marginBottom: 10 }}>
               The women who have sat with this data describe a particular moment. Not overwhelm. Not distress. Recognition.
@@ -695,12 +646,9 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
               That moment is available to you.
             </p>
           </div>
-
           <p style={{ color: B.muted, fontSize: "0.88rem", lineHeight: 1.82, marginBottom: 24 }}>
             I want you to do something. Three days. Because in three days I am going to show you things about yourself that you have never been shown before. Not what a coach thinks. Not what a 360 says. What your body is actually doing. What the system around you is actually asking. And what becomes possible when you can finally see it all in one place.
           </p>
-
-          {/* Three instruments */}
           <div style={{ marginBottom: 24 }}>
             {[
               { n: "01", title: "The Unseen Load", color: B.purple, desc: "Your performance map: what you sense, what you carry, what the pattern reveals. The starting point for everything that follows." },
@@ -716,20 +664,15 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
               </div>
             ))}
           </div>
-
-          {/* What you leave with */}
           <div style={{ background: B.offwhite, border: `1.5px solid ${B.rule}`, padding: "16px 20px", borderRadius: 6, marginBottom: 24 }}>
             <Mono style={{ color: B.purple, display: "block", marginBottom: 10 }}>What you will leave with</Mono>
             <p style={{ fontSize: "0.83rem", lineHeight: 1.78, color: B.muted }}>
               You will not leave with a folder of insights and a list of things to think about. You will leave with a complete physiological and organisational picture of your performance, a personalised map of the specific leverage points that will make the most difference, and the clarity to act on it.
             </p>
           </div>
-
           <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: B.muted, fontSize: "0.97rem", lineHeight: 1.75, marginBottom: 24 }}>
             You have been performing without the full picture. The Unseen Load gives you the first layer. The retreat gives you the rest.
           </p>
-
-          {/* Permission */}
           <div style={{ borderLeft: `3px solid ${B.purple}`, paddingLeft: 20, marginBottom: 28 }}>
             <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.97rem", fontWeight: 300, color: B.ink, lineHeight: 1.8, marginBottom: 12 }}>
               This will feel like time away from your leadership. It is not. It is the most strategic investment in your performance you can make.
@@ -738,7 +681,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
               Everything you lead flows through the instrument you are. You have spent years developing your technical capability, your strategic thinking, your relational intelligence. This is the part you have not yet been given the tools to develop.
             </p>
           </div>
-
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button onClick={() => alert("Thank you. The BHI team will be in touch shortly.")} style={btnStyle(B.purple)}>
               I want to attend &rarr;
@@ -749,7 +691,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
           </div>
         </div>
 
-        {/* Share */}
         <div style={{ maxWidth: 660, marginBottom: 44 }}>
           <div style={{ background: B.offwhite, border: `1.5px solid ${B.rule}`, borderRadius: 8, padding: "20px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <div>
@@ -762,15 +703,14 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
           </div>
         </div>
 
-        {/* Disclaimer and copyright */}
         <div style={{ maxWidth: 660, paddingTop: 24, borderTop: `1px solid ${B.rule}` }}>
-          <Mono style={{ color: B.rule, lineHeight: 1.85, display: "block", marginBottom: 10 }}>
+          <Mono style={{ color: B.muted, lineHeight: 1.85, display: "block", marginBottom: 10 }}>
             The Unseen Load is a reflective performance intelligence tool developed by Business Health Institute. It is intended for personal reflection only and does not constitute medical, psychological, or occupational health advice. It does not diagnose or treat any condition.
           </Mono>
-          <Mono style={{ color: B.rule, lineHeight: 1.85, display: "block", marginBottom: 10 }}>
+          <Mono style={{ color: B.muted, lineHeight: 1.85, display: "block", marginBottom: 10 }}>
             The retreat incorporates Firstbeat Life HRV technology (Firstbeat Technologies Ltd) and the OHFB Workplace Analytics System, developed by Afriforte and the WorkWell Research Unit, Faculty of Economic and Management Sciences, North-West University, Potchefstroom, South Africa.
           </Mono>
-          <Mono style={{ color: B.rule, lineHeight: 1.85, display: "block" }}>
+          <Mono style={{ color: B.muted, lineHeight: 1.85, display: "block" }}>
             &copy; {new Date().getFullYear()} Business Health Institute. All rights reserved. The Unseen Load and its frameworks are the intellectual property of Business Health Institute and may not be reproduced, adapted, or distributed without written permission.
           </Mono>
         </div>
@@ -779,7 +719,6 @@ function ScreenMap({ domainResults, narrative, openQuestion, userData, email }) 
   );
 }
 
-// ── SHARED BUTTON STYLES ────────────────────────────────────────────────────
 const btnStyle = (bg, disabled = false) => ({
   fontFamily: "'DM Mono', monospace",
   letterSpacing: "0.12em",
@@ -822,7 +761,6 @@ const inputStyle = {
   fontWeight: 300,
 };
 
-// ── GLOBAL STYLES injected once ─────────────────────────────────────────────
 const injectGlobalStyles = () => {
   if (document.getElementById("bhi-global")) return;
   const s = document.createElement("style");
@@ -834,12 +772,11 @@ const injectGlobalStyles = () => {
     * { box-sizing: border-box; }
     body { margin: 0; background: #F6F6F9; }
     select option { font-family: 'Lato', sans-serif; }
-    input::placeholder { color: #C0C0D8; }
+    input::placeholder { color: #9090AA; }
   `;
   document.head.appendChild(s);
 };
 
-// ── MAIN APP ────────────────────────────────────────────────────────────────
 export default function App() {
   useEffect(() => { injectGlobalStyles(); }, []);
 
@@ -941,7 +878,6 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
 
     let narrative = "", openQuestion = "";
     try {
-      // Call our protected serverless function — API key never exposed to browser
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -966,7 +902,6 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
       openQuestion = "What would it mean for the way you lead if the invisible cost of your performance became as measurable as the results you produce?";
     }
 
-    // Send email via serverless function
     if (capturedEmail) {
       try {
         await fetch("/api/send-email", {
@@ -995,13 +930,13 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
 
   return (
     <div style={{ fontFamily: "'Lato', sans-serif", background: B.offwhite, minHeight: "100vh" }}>
-      {screen === "intro"     && <ScreenIntro onStart={() => setScreen("context")} />}
-      {screen === "context"   && <ScreenContext onSubmit={data => { setUserData(data); setDomainIdx(0); setShowIntro(true); setScreen("questions"); }} onBack={() => setScreen("intro")} />}
-      {screen === "questions" && showIntro  && <ScreenDomainIntro domain={DOMAINS[domainIdx]} domainIndex={domainIdx} onContinue={() => setShowIntro(false)} onBack={goBack} />}
-      {screen === "questions" && !showIntro && <ScreenQuestion domain={DOMAINS[domainIdx]} domainIndex={domainIdx} qIndex={qIdx} answer={currentAnswer} onSelect={setAnswer} onNext={goNext} onBack={goBack} isLast={isLastQ} />}
-      {screen === "email"     && <ScreenEmail onSubmit={e => { setEmail(e); generateMap(e); }} onSkip={() => generateMap("")} />}
-      {screen === "generating"&& <ScreenGenerating status={genStatus} />}
-      {screen === "map"       && results && <ScreenMap {...results} userData={userData} email={email} />}
+      {screen === "intro"      && <ScreenIntro onStart={() => setScreen("context")} />}
+      {screen === "context"    && <ScreenContext onSubmit={data => { setUserData(data); setDomainIdx(0); setShowIntro(true); setScreen("questions"); }} onBack={() => setScreen("intro")} />}
+      {screen === "questions"  && showIntro  && <ScreenDomainIntro domain={DOMAINS[domainIdx]} domainIndex={domainIdx} onContinue={() => setShowIntro(false)} onBack={goBack} />}
+      {screen === "questions"  && !showIntro && <ScreenQuestion domain={DOMAINS[domainIdx]} domainIndex={domainIdx} qIndex={qIdx} answer={currentAnswer} onSelect={setAnswer} onNext={goNext} onBack={goBack} isLast={isLastQ} />}
+      {screen === "email"      && <ScreenEmail onSubmit={e => { setEmail(e); generateMap(e); }} onSkip={() => generateMap("")} />}
+      {screen === "generating" && <ScreenGenerating status={genStatus} />}
+      {screen === "map"        && results && <ScreenMap {...results} userData={userData} email={email} />}
     </div>
   );
 }
