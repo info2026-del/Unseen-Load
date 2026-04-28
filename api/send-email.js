@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       user_id: publicKey,
       template_params: {
         to_email: userEmail,
-       bhi_email: "info@businesshealthinstitute.co.uk", 
+       bhi_email: "info@businesshealthinstitute.co.uk",
         name,
         role,
         sector,
