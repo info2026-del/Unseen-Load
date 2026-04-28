@@ -928,29 +928,26 @@ Format: narrative paragraphs, then a blank line, then exactly "OPEN QUESTION:" o
 
     // ── EMAILJS: send directly from browser, no server needed ─────────────
     if (capturedEmail) {
-      try {
-        await sendViaEmailJS({
-          name:          userData.name || "Not provided",
-          role:          userData.role || "Not provided",
-          sector:        userData.sector || "Not provided",
-          stage:         userData.stage || "Not provided",
-          concern:       userData.concern || "Not provided",
-          user_email:    capturedEmail,
-          domain_scores: domainSummary,
-          narrative:     narrative,
-          open_question: openQuestion,
-        });
-      } catch (err) {
-        console.warn("EmailJS failed:", err);
-      }
-    }
-
-    clearInterval(interval);
-    setResults({ domainResults, narrative, openQuestion });
-    setScreen("map");
-    window.scrollTo(0, 0);
-  };
-
+  try {
+    await fetch("/api/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userEmail: capturedEmail,
+        name: userData.name,
+        role: userData.role,
+        sector: userData.sector,
+        stage: userData.stage,
+        concern: userData.concern,
+        domainScores: domainSummary,
+        narrative,
+        openQuestion,
+      })
+    });
+  } catch (err) {
+    console.warn("Email failed:", err);
+  }
+}
   return (
     <div style={{ fontFamily: "'Lato', sans-serif", background: B.offwhite, minHeight: "100vh" }}>
       {screen === "intro"      && <ScreenIntro onStart={() => setScreen("context")} />}
